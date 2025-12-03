@@ -9,20 +9,9 @@
               U-Farm Greenhouse
             </p>
             <h1 class="display-5 fw-bold mb-2">Greenhouse Dashboard</h1>
-            <p class="lead mb-3">
+            <p class="lead mb-0">
               Live snapshot of the Illinois Tech U-Farm environment, beds, and tasks.
             </p>
-            <div class="d-flex flex-wrap gap-2">
-              <RouterLink to="/plants" class="btn btn-success btn-sm px-3">
-                View plants
-              </RouterLink>
-              <RouterLink to="/tasks" class="btn btn-outline-light btn-sm px-3">
-                View tasks
-              </RouterLink>
-              <RouterLink to="/zones" class="btn btn-outline-light btn-sm px-3">
-                Zones overview
-              </RouterLink>
-            </div>
           </div>
 
           <div class="col-md-5 mt-3 mt-md-0">
@@ -38,26 +27,38 @@
                 <div class="row text-center g-2">
                   <div class="col-4">
                     <p class="text-uppercase small mb-1 opacity-75">Temp</p>
-                    <p class="fs-4 fw-semibold mb-0">72°F</p>
-                    <p class="small opacity-75 mb-0">Target 70-75</p>
+                    <p class="fs-4 fw-semibold mb-0">
+                      {{ currentConditions.temp }}°F
+                    </p>
+                    <p class="small opacity-75 mb-0">
+                      Target {{ currentConditions.tempTarget }}
+                    </p>
                   </div>
                   <div class="col-4">
                     <p class="text-uppercase small mb-1 opacity-75">Humidity</p>
-                    <p class="fs-4 fw-semibold mb-0">62%</p>
-                    <p class="small opacity-75 mb-0">Target 55-65</p>
+                    <p class="fs-4 fw-semibold mb-0">
+                      {{ currentConditions.humidity }}%
+                    </p>
+                    <p class="small opacity-75 mb-0">
+                      Target {{ currentConditions.humidityTarget }}
+                    </p>
                   </div>
                   <div class="col-4">
                     <p class="text-uppercase small mb-1 opacity-75">Vents</p>
-                    <p class="fs-4 fw-semibold mb-0">Auto</p>
-                    <p class="small opacity-75 mb-0">Fans: low</p>
+                    <p class="fs-4 fw-semibold mb-0">
+                      {{ currentConditions.vents }}
+                    </p>
+                    <p class="small opacity-75 mb-0">
+                      Fans: {{ currentConditions.fans }}
+                    </p>
                   </div>
                 </div>
 
                 <hr class="border-secondary my-3" />
 
                 <div class="small d-flex flex-wrap justify-content-between">
-                  <span>Last updated: 2 min ago</span>
-                  <span>Sensor Location: Middle</span>
+                  <span>Last updated: {{ currentConditions.lastUpdated }}</span>
+                  <span>Sensor location: {{ currentConditions.sensorLocation }}</span>
                 </div>
               </div>
             </div>
@@ -73,9 +74,9 @@
         <div class="card h-100 shadow-sm">
           <div class="card-body">
             <p class="text-uppercase small text-muted mb-1">Plants</p>
-            <h2 class="h4 mb-1">14 plants</h2>
+            <h2 class="h4 mb-1">{{ totalPlants }} plants</h2>
             <p class="small text-muted mb-3">
-              3 near harvest, 2 need water
+              Spread across beds: {{ bedNames.join(', ') }}
             </p>
             <RouterLink to="/plants" class="btn btn-sm btn-outline-success">
               Open list of plants
@@ -88,9 +89,11 @@
         <div class="card h-100 shadow-sm">
           <div class="card-body">
             <p class="text-uppercase small text-muted mb-1">Beds &amp; zones</p>
-            <h2 class="h4 mb-1">3 zones</h2>
+            <h2 class="h4 mb-1">
+              {{ totalZones }} zones & {{ totalBeds }} beds
+            </h2>
             <p class="small text-muted mb-3">
-              North zone is ideal, Middle zone is too warm
+              {{ zoneTemperatureLine }}
             </p>
             <RouterLink to="/zones" class="btn btn-sm btn-outline-success">
               View zones
@@ -99,13 +102,15 @@
         </div>
       </div>
 
+      <!-- Tasks -->
       <div class="col-md-4">
         <div class="card h-100 shadow-sm">
           <div class="card-body">
             <p class="text-uppercase small text-muted mb-1">Tasks</p>
-            <h2 class="h4 mb-1">6 open tasks</h2>
+            <h2 class="h4 mb-1">{{ totalTasks }} open tasks</h2>
             <p class="small text-muted mb-3">
-              2 high priority, 4 low priority
+              {{ highPriorityCount }} high priority,
+              {{ lowPriorityCount }} low priority
             </p>
             <RouterLink to="/tasks" class="btn btn-sm btn-outline-success">
               Review tasks
@@ -118,5 +123,43 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
+
+import { plants } from '../data/plants';
+import { zones } from '../data/zones';
+import { tasks } from '../data/tasks';
+import { currentConditions } from '../data/conditions';
+
+const totalPlants = computed(() => plants.length);
+
+const totalZones = computed(() => zones.length);
+
+const bedNames = computed(() => {
+  const set = new Set();
+  zones.forEach((zone) => {
+    if (Array.isArray(zone.beds)) {
+      zone.beds.forEach((bed) => set.add(bed));
+    }
+  });
+  return Array.from(set);
+});
+
+const totalBeds = computed(() => bedNames.value.length);
+
+const zoneTemperatureLine = computed(() => {
+  if (!zones.length) return 'No zones configured yet.';
+  const zone = zones[0];
+  return `${zone.name} zone is ${zone.tempRange}`;
+});
+
+const totalTasks = computed(() => tasks.length);
+
+const highPriorityCount = computed(
+  () => tasks.filter((t) => t.priority === 'High').length
+);
+
+const lowPriorityCount = computed(
+  () => tasks.filter((t) => t.priority === 'Low').length
+);
 </script>
