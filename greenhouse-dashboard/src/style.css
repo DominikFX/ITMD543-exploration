@@ -96,3 +96,9 @@
 .zone-card .badge {
   font-size: 0.7rem;
 }
+
+.plant-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.5rem;
+}
