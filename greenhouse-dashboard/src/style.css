@@ -1,0 +1,98 @@
+.hero-section {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  background-image: url('/greenhouse-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 260px;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #003000b0;
+}
+
+.hero-content {
+  position: relative;
+  padding: 2.5rem 2rem;
+  color: #f8f9fa;
+}
+
+.env-card {
+  backdrop-filter: blur(4px);
+}
+
+.accent-section {
+  background-color: #e2f3e6;
+  border-radius: 1rem;
+  padding: 1.25rem 1rem 1.5rem;
+}
+
+.accent-section .card {
+  border: none;
+}
+
+.dashboard-summary {
+  margin-top: 1.5rem;
+  border-radius: 1rem;
+  background-color: #e2f3e6;
+  padding: 1.25rem 1rem 1.5rem;
+}
+
+.dashboard-summary .card {
+  border: none;
+}
+
+.brand-subtitle {
+  font-size: 0.7rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.navbar .nav-link.router-link-active {
+  font-weight: 600;
+  border-bottom: 2px solid #198754;
+  border-radius: 0;
+}
+
+.plant-card .progress {
+  height: 0.5rem;
+  border-radius: 999px;
+}
+
+.plant-card .progress-bar {
+  border-radius: 999px;
+}
+
+.bed-filter-btn {
+  font-size: 0.8rem;
+  padding-inline: 0.75rem;
+}
+
+.task-checkbox {
+  margin-top: 0.2rem;
+  cursor: pointer;
+  border: 2px solid #6c757d;
+  border-radius: 0.25rem;
+}
+
+.task-checkbox:checked {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.task-filter-btn {
+  font-size: 0.8rem;
+  padding-inline: 0.75rem;
+}
+
+.task-card .card-body {
+  font-size: 0.9rem;
+}
+
+.zone-card .badge {
+  font-size: 0.7rem;
+}
