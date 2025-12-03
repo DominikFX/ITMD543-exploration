@@ -29,9 +29,6 @@
             <li class="nav-item">
               <RouterLink to="/tasks" class="nav-link">Tasks</RouterLink>
             </li>
-            <li class="nav-item">
-              <RouterLink to="/about" class="nav-link">About</RouterLink>
-            </li>
           </ul>
         </div>
       </div>
